@@ -1,0 +1,14 @@
+const assert = require('node:assert/strict');
+const e = require('../dist/engine.js');
+assert.equal(e.normalize('Inspeção'),'inspecao');
+assert.ok(e.diagnose('O estoque em papel perde material').tools.includes('Registros e planilhas'));
+assert.ok(e.diagnose('Atraso de serviços e prazo de entrega').tools.includes('Serviços e etapas'));
+assert.ok(e.diagnose('Perdemos retornos de clientes').tools.includes('Agendamentos e retornos'));
+assert.equal(e.diagnose('Uma dificuldade desconhecida').tools.length,0);
+assert.notEqual(e.diagnose('Estoque manual','Comércio',0).body,e.diagnose('Estoque manual','Comércio',1).body);
+assert.deepEqual(e.extract('Empresa: Exemplo\nPedido: 42\nTotal: R$ 1.250,00\nEntrega: 15/10/2026'),{empresa:'Exemplo',documento:'42',valor:'1.250,00',prazo:'15/10/2026'});
+assert.equal(e.extract('Texto sem campos').valor,'Não informado');
+assert.match(e.reply('Quanto custa?','Manutenção',0),/nenhum preço comercial/);
+assert.match(e.reply('Meu pedido está atrasado','Distribuidora',1),/número do pedido/);
+assert.notEqual(e.reply('Olá','Serviços',0),e.reply('Olá','Comércio',1));
+console.log('11 verificações aprovadas: cenários, extração, dados ausentes e variação.');
