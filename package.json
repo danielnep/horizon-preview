@@ -1,0 +1,10 @@
+{
+  "name": "horizon-preview",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check dist/app.js && node --check dist/core/store.js && node --check dist/core/demonstration.js && node --check dist/core/assistants.js && node --check dist/integrations/google-sheets.js"
+  }
+}
