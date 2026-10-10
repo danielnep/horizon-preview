@@ -39,6 +39,14 @@ O nome público é Horizon Preview; o repositório e o endereço existentes cont
 
 O diretório `dist/` contém o código-fonte estático da aplicação completa. Consulte [docs/estrutura.md](docs/estrutura.md) para execução e manutenção.
 
+## GitHub Pages
+
+Aplicativo: [danielnep.github.io/horizon-preview](https://danielnep.github.io/horizon-preview/).
+
+A publicação da branch `main` em `/(root)` usa o `index.html` da raiz. Essa entrada carrega a mesma aplicação em `dist/`, preservando a navegação, os parâmetros e o endereço compartilhado. O arquivo `.nojekyll` permite publicar os arquivos estáticos diretamente.
+
+Após editar `dist/index.html`, execute `npm run pages` para atualizar a entrada. `npm run check` verifica se ela corresponde à aplicação; não copie o README para a página inicial.
+
 ## Executar
 
 Sirva `dist/` por HTTP/HTTPS em qualquer hospedagem estática. Não exige instalação ou chave de API para as demonstrações. O aplicativo usa módulos JavaScript. Os dados fictícios permanecem neste navegador; cada combinação tem armazenamento próprio. O formulário de contato permanece na memória até abrir a mensagem.
