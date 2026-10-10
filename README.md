@@ -1,7 +1,5 @@
 # Horizon Preview
 
-Código completo da aplicação de demonstração da Horizon publicada em [horizon-preview.danielxavier.chatgpt.site](https://horizon-preview.danielxavier.chatgpt.site/). A tela indicada pelo proprietário está em [Criar ferramenta personalizada](https://horizon-preview.danielxavier.chatgpt.site/#personalizada).
-
 Aplicativo comercial mobile-first da Horizon. Uma vitrine de ferramentas combináveis, com exemplos individuais e uma operação montada a partir da seleção do visitante.
 
 **Sua empresa, seu sistema. Escolha as ferramentas que precisa. Nós conectamos e personalizamos tudo para você.**
@@ -24,32 +22,13 @@ Nome público: **Horizon Preview**. A identidade obrigatória está em `dist/hor
 
 O nome público é Horizon Preview; o repositório e o endereço existentes continuam `horizon-preview`, preservando os links já utilizados. O site institucional `danielnep/horizon-site` é um projeto separado.
 
-## Estrutura do código
-
-| Caminho | Conteúdo |
-| --- | --- |
-| `dist/index.html` | Entrada da aplicação pronta para hospedagem. |
-| `dist/app.js` | Telas, navegação e eventos da interface. |
-| `dist/core/` | Catálogo de ferramentas, armazenamento local, demonstrações e simuladores. |
-| `dist/styles.css` e `dist/horizon-theme.css` | Estilos da interface e identidade visual. |
-| `dist/assets/` | Imagens da marca. |
-| `dist/integrations/` | Adaptador opcional para Google Sheets e Apps Script. |
-| `tests/` | Testes existentes da aplicação. |
-| `docs/` | Documentação técnica. |
-
-O diretório `dist/` contém o código-fonte estático da aplicação completa. Consulte [docs/estrutura.md](docs/estrutura.md) para execução e manutenção.
-
 ## Executar
 
+Este repositório corresponde ao site **https://horizon-preview.danielxavier.chatgpt.site/**, versão publicada 6, fonte `17767477dec60f7778f047a21bd7191e26363488`. Os arquivos em `dist/` são os mesmos da publicação original.
+
+A raiz contém `index.html` e `.nojekyll` para abrir o aplicativo quando o GitHub Pages publica `main` a partir de `/(root)`. Depois de editar `dist/index.html`, execute `npm run pages` para atualizar essa entrada, preservando as rotas como `#personalizada` e os parâmetros de seleção e indicação. A cópia do código não altera as configurações de hospedagem do repositório.
+
 Sirva `dist/` por HTTP/HTTPS em qualquer hospedagem estática. Não exige instalação ou chave de API para as demonstrações. O aplicativo usa módulos JavaScript. Os dados fictícios permanecem neste navegador; cada combinação tem armazenamento próprio. O formulário de contato permanece na memória até abrir a mensagem.
-
-Com Python 3, execute a partir da raiz do repositório:
-
-```bash
-python3 -m http.server 8000 --directory dist
-```
-
-Abra [http://localhost:8000](http://localhost:8000). A tela personalizada está em [http://localhost:8000/#personalizada](http://localhost:8000/#personalizada).
 
 `dist/core/tools.js` define o catálogo; `store.js` contém regras e dados; `demonstration.js` executa o guia; `assistants.js` contém os simuladores; `dist/app.js` compõe as telas e eventos.
 
