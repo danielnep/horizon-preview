@@ -1,4 +1,6 @@
-# Horizon Demonstração
+# Horizon Preview
+
+Código completo da aplicação de demonstração da Horizon publicada em [horizon-preview.danielxavier.chatgpt.site](https://horizon-preview.danielxavier.chatgpt.site/). A tela indicada pelo proprietário está em [Criar ferramenta personalizada](https://horizon-preview.danielxavier.chatgpt.site/#personalizada).
 
 Aplicativo comercial mobile-first da Horizon. Uma vitrine de ferramentas combináveis, com exemplos individuais e uma operação montada a partir da seleção do visitante.
 
@@ -22,9 +24,32 @@ Nome público: **Horizon Demonstração**. A identidade obrigatória está em `d
 
 O nome técnico do repositório e o endereço existente continuam `horizon-preview`, preservando os links já utilizados. O site institucional `danielnep/horizon-site` é um projeto separado.
 
+## Estrutura do código
+
+| Caminho | Conteúdo |
+| --- | --- |
+| `dist/index.html` | Entrada da aplicação pronta para hospedagem. |
+| `dist/app.js` | Telas, navegação e eventos da interface. |
+| `dist/core/` | Catálogo de ferramentas, armazenamento local, demonstrações e simuladores. |
+| `dist/styles.css` e `dist/horizon-theme.css` | Estilos da interface e identidade visual. |
+| `dist/assets/` | Imagens da marca. |
+| `dist/integrations/` | Adaptador opcional para Google Sheets e Apps Script. |
+| `tests/` | Testes existentes da aplicação. |
+| `docs/` | Documentação técnica. |
+
+O diretório `dist/` contém o código-fonte estático da aplicação completa. Consulte [docs/estrutura.md](docs/estrutura.md) para execução e manutenção.
+
 ## Executar
 
 Sirva `dist/` por HTTP/HTTPS em qualquer hospedagem estática. Não exige instalação ou chave de API para as demonstrações. O aplicativo usa módulos JavaScript. Os dados fictícios permanecem neste navegador; cada combinação tem armazenamento próprio. O formulário de contato permanece na memória até abrir a mensagem.
+
+Com Python 3, execute a partir da raiz do repositório:
+
+```bash
+python3 -m http.server 8000 --directory dist
+```
+
+Abra [http://localhost:8000](http://localhost:8000). A tela personalizada está em [http://localhost:8000/#personalizada](http://localhost:8000/#personalizada).
 
 `dist/core/tools.js` define o catálogo; `store.js` contém regras e dados; `demonstration.js` executa o guia; `assistants.js` contém os simuladores; `dist/app.js` compõe as telas e eventos.
 
