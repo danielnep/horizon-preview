@@ -227,6 +227,9 @@ body.has-selection .toast { bottom: 112px; }
   .topbar { height: 65px; padding-inline: 17px; }
   .topbar-title { max-width: 185px; font-size: 13px; }
   .mode-badge { display: none; }
+  .mobile-menu, .topbar-actions .icon-button, .drawer-close { width: 44px; min-width: 44px; height: 44px; }
+  .drawer-close { background: transparent; }
+  .sidebar { padding-bottom: env(safe-area-inset-bottom); }
   .hero { padding-top: 8px; gap: 26px; }
   .hero h1 { font-size: 44px; }
   .hero-description { font-size: 16px; }
@@ -239,6 +242,7 @@ body.has-selection .toast { bottom: 112px; }
   .tool-card h3 { font-size: 18px; }
   .section-header { display: block; }
   .section-tag { display: block; margin-top: 12px; }
+  .section-tag { max-width: none; text-align: left; }
   .page-head { flex-direction: column; }
   .page-head h1 { font-size: 29px; }
   .page-head .btn { margin-top: 0; }
@@ -251,6 +255,8 @@ body.has-selection .toast { bottom: 112px; }
   .solution-select .tool-icon { display: none; }
   .table-toolbar { flex-wrap: wrap; }
   .table-toolbar .btn { width: 100%; }
+  .panel, .stack, .tool-card, .page-head > div { min-width: 0; }
+  .custom-banner > div:nth-child(2) { min-width: 0; }
   .selection-bar { left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); gap: 10px; padding: 12px; }
   .selection-bar small { display: none; }
   .selection-bar .btn { font-size: 13px; padding-inline: 12px; }

@@ -20,9 +20,9 @@ Aplicativo comercial mobile-first da Horizon. Uma vitrine de ferramentas combin�
 
 ## Marca
 
-Nome público: **Horizon Demonstração**. A identidade obrigatória está em `dist/horizon-theme.css`: branco, azul celeste tecnológico mais forte, cinzas e detalhes azul-prateados; componentes de cantos discretos, navegação clara e textos curtos para o cliente. Reutilize esses tokens e componentes nos futuros aplicativos da Horizon.
+Nome público: **Horizon Preview**. A identidade obrigatória está em `dist/horizon-theme.css`: branco, azul celeste tecnológico mais forte, cinzas e detalhes azul-prateados; componentes de cantos discretos, navegação clara e textos curtos para o cliente. Reutilize esses tokens e componentes nos futuros aplicativos da Horizon.
 
-O nome técnico do repositório e o endereço existente continuam `horizon-preview`, preservando os links já utilizados. O site institucional `danielnep/horizon-site` é um projeto separado.
+O nome público é Horizon Preview; o repositório e o endereço existentes continuam `horizon-preview`, preservando os links já utilizados. O site institucional `danielnep/horizon-site` é um projeto separado.
 
 ## Estrutura do código
 
