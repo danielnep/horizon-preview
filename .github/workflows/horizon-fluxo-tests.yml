@@ -1,0 +1,29 @@
+name: Horizon Fluxo - testes
+on:
+  push:
+    branches:
+      - feat/horizon-fluxo-v0.1
+    paths:
+      - "horizon-fluxo/**"
+      - ".github/workflows/horizon-fluxo-tests.yml"
+  pull_request:
+    paths:
+      - "horizon-fluxo/**"
+      - ".github/workflows/horizon-fluxo-tests.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: horizon-fluxo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Checar sintaxe
+        run: |
+          node --check server.mjs
+          node --check public/app.js
+      - name: Testar API e sincronização
+        run: npm test
