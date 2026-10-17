@@ -14,7 +14,7 @@ test('nuvem aceita sincronização autenticada e respeita revisão',async()=>{
 const local=start('local',basePort,{DEMO_MODE:'1'}),cloud=start('cloud',basePort+1,{MODE:'cloud',ADMIN_PASSWORD:'troque-senha-na-nuvem',SYNC_TOKEN:'test-secret-key'});
 try{await Promise.all([wait(basePort),wait(basePort+1)]);
 const db=new DatabaseSync(path.join(temp,'local.sqlite'));
-const names=['users','shifts','products','orders','order_items','dispatches','audit','revisions'];
+const names=['users','shifts','products','orders','order_items','dispatches','audit','revisions','notices','notice_reads','order_requests'];
 const tables=Object.fromEntries(names.map(t=>[t,db.prepare('SELECT * FROM '+t).all()]));
 let denied=await post(basePort+1,'sync/push',{hub:'test-store',revision:1,tables},'invalid');assert.equal(denied.status,401);
 let ok=await post(basePort+1,'sync/push',{hub:'test-store',revision:1,tables},'test-secret-key');assert.equal(ok.status,200,JSON.stringify(ok.json));
