@@ -70,7 +70,7 @@ async function readBody(req){let chunks=[],bytes=0;for await(const c of req){byt
 function activeShift(userId){return get('SELECT * FROM shifts WHERE user_id=? AND end_at IS NULL ORDER BY id DESC LIMIT 1',userId)}
 function snapshot(user){let products=all(`SELECT p.id,p.name,p.category,p.price_cents,p.available,p.active,p.sort_order, COALESCE(SUM(CASE WHEN o.status <> 'cancelled' THEN oi.quantity ELSE 0 END),0) AS sales_count FROM products p LEFT JOIN order_items oi ON oi.product_id=p.id LEFT JOIN orders o ON o.id=oi.order_id GROUP BY p.id ORDER BY sales_count DESC,p.sort_order,p.name`);
 let shifts=all(`SELECT s.*,u.display_name,u.role FROM shifts s JOIN users u ON u.id=s.user_id WHERE s.end_at IS NULL ORDER BY u.display_name`);if(user?.role==='waiter')shifts=shifts.filter(s=>s.user_id===user.id);
-let orders=all(`SELECT o.*,u.display_name AS waiter_name, op.display_name AS operator_name FROM orders o JOIN users u ON o.waiter_id=u.id JOIN users op ON o.operator_id=op.id WHERE o.created_at >= datetime('now','-14 days') ORDER BY o.id DESC LIMIT 300`);if(user?.role==='waiter')orders=orders.filter(o=>o.waiter_id===user.id);
+let orders=all(`SELECT o.*,u.display_name AS waiter_name, op.display_name AS operator_name FROM orders o JOIN users u ON o.waiter_id=u.id JOIN users op ON o.operator_id=op.id WHERE datetime(o.created_at) >= datetime('now','-14 days') ORDER BY o.id DESC LIMIT 300`);if(user?.role==='waiter')orders=orders.filter(o=>o.waiter_id===user.id);
 let ids=orders.map(x=>x.id);let items=ids.length?all(`SELECT * FROM order_items WHERE order_id IN (${ids.map(()=>'?').join(',')})`,...ids):[];for(const o of orders)o.items=items.filter(i=>i.order_id===o.id);
 let dispatches=all(`SELECT d.*,u.display_name AS waiter_name,o.table_no FROM dispatches d LEFT JOIN users u ON u.id=d.waiter_id JOIN orders o ON d.order_id=o.id WHERE d.status IN ('pending','acknowledged') ORDER BY d.id DESC LIMIT 100`);if(user?.role==='waiter')dispatches=dispatches.filter(d=>d.waiter_id===user.id);
 let users=all(`SELECT ${PUBLIC_USER} FROM users WHERE active=1 ORDER BY display_name`);
@@ -79,18 +79,18 @@ const notices=all(`SELECT n.id,n.ts,n.audience,n.title,n.message,CASE WHEN nr.us
  WHERE n.audience='all' OR n.audience=? ORDER BY n.id DESC LIMIT 80`,user.id,user.role);
 return {notices,unread_notices:notices.filter(n=>!n.read).length,revision:revision(),server_mode:CLOUD_MODE?'cloud':'local',synced_at:get("SELECT value FROM meta WHERE key='synced_at'")?.value||null,products,shifts,orders,dispatches,users:user?.role==='manager'||user?.role==='cashier'||user?.role==='kitchen'?users:users.filter(x=>x.role==='waiter').map(x=>({id:x.id,display_name:x.display_name,role:x.role})),me:publicUser(user),audit:user?.role==='manager'?all('SELECT a.*,u.display_name AS actor_name FROM audit a LEFT JOIN users u ON u.id=a.actor_id ORDER BY a.id DESC LIMIT 60'):[]};}
 function insights(){
-const today=all("SELECT * FROM orders WHERE created_at >= datetime('now','-1 day') AND status<>'cancelled'");
+const today=all("SELECT * FROM orders WHERE datetime(created_at) >= datetime('now','-1 day') AND status<>'cancelled'");
 const ready=today.filter(o=>o.ready_at);
 let prep=ready.map(o=>(Date.parse(o.ready_at)-Date.parse(o.created_at))/60000).filter(x=>Number.isFinite(x)&&x>=0);
 let retrieval=today.filter(o=>o.delivered_at&&o.ready_at).map(o=>(Date.parse(o.delivered_at)-Date.parse(o.ready_at))/60000).filter(x=>Number.isFinite(x)&&x>=0);
-let popular=all(`SELECT p.name, SUM(oi.quantity) AS qty, p.available FROM order_items oi JOIN products p ON p.id=oi.product_id JOIN orders o ON o.id=oi.order_id WHERE o.created_at>=datetime('now','-7 days') AND o.status <> 'cancelled' GROUP BY p.id ORDER BY qty DESC LIMIT 8`);
+let popular=all(`SELECT p.name, SUM(oi.quantity) AS qty, p.available FROM order_items oi JOIN products p ON p.id=oi.product_id JOIN orders o ON o.id=oi.order_id WHERE datetime(o.created_at)>=datetime('now','-7 days') AND o.status <> 'cancelled' GROUP BY p.id ORDER BY qty DESC LIMIT 8`);
 let waiting=Number(get("SELECT COUNT(*) AS n FROM orders WHERE status IN ('new','preparing')").n);
 let outstanding=Number(get("SELECT COUNT(*) AS n FROM orders WHERE status='ready'").n);
-let cancelled=Number(get("SELECT COUNT(*) AS n FROM orders WHERE created_at>=datetime('now','-7 days') AND status='cancelled'").n);
-let estimatedValue=Number(get(`SELECT COALESCE(SUM(i.price_cents*i.quantity),0) AS n FROM order_items i JOIN orders o ON o.id=i.order_id WHERE o.created_at>=datetime('now','-7 days') AND o.status<>'cancelled'`).n);
-const days=all(`SELECT SUBSTR(created_at,1,10) AS day,COUNT(*) AS count FROM orders WHERE created_at>=datetime('now','-7 days') AND status<>'cancelled' GROUP BY SUBSTR(created_at,1,10) ORDER BY day ASC`);
-const hours=all(`SELECT SUBSTR(created_at,12,2) AS hour,COUNT(*) AS count FROM orders WHERE created_at>=datetime('now','-7 days') AND status<>'cancelled' GROUP BY SUBSTR(created_at,12,2) ORDER BY hour ASC`);
-const waiters=all(`SELECT u.display_name AS name,COUNT(o.id) AS orders,SUM(CASE WHEN o.status='delivered' THEN 1 ELSE 0 END) AS delivered FROM orders o JOIN users u ON u.id=o.waiter_id WHERE o.created_at>=datetime('now','-7 days') AND o.status<>'cancelled' GROUP BY o.waiter_id ORDER BY orders DESC`);
+let cancelled=Number(get("SELECT COUNT(*) AS n FROM orders WHERE datetime(created_at)>=datetime('now','-7 days') AND status='cancelled'").n);
+let estimatedValue=Number(get(`SELECT COALESCE(SUM(i.price_cents*i.quantity),0) AS n FROM order_items i JOIN orders o ON o.id=i.order_id WHERE datetime(o.created_at)>=datetime('now','-7 days') AND o.status<>'cancelled'`).n);
+const days=all(`SELECT SUBSTR(created_at,1,10) AS day,COUNT(*) AS count FROM orders WHERE datetime(created_at)>=datetime('now','-7 days') AND status<>'cancelled' GROUP BY SUBSTR(created_at,1,10) ORDER BY day ASC`);
+const hours=all(`SELECT SUBSTR(created_at,12,2) AS hour,COUNT(*) AS count FROM orders WHERE datetime(created_at)>=datetime('now','-7 days') AND status<>'cancelled' GROUP BY SUBSTR(created_at,12,2) ORDER BY hour ASC`);
+const waiters=all(`SELECT u.display_name AS name,COUNT(o.id) AS orders,SUM(CASE WHEN o.status='delivered' THEN 1 ELSE 0 END) AS delivered FROM orders o JOIN users u ON u.id=o.waiter_id WHERE datetime(o.created_at)>=datetime('now','-7 days') AND o.status<>'cancelled' GROUP BY o.waiter_id ORDER BY orders DESC`);
 const unavailable=all("SELECT COUNT(*) AS n FROM products WHERE active=1 AND available=0")[0].n;
 const overSla=prep.filter(x=>x>20).length;
 let notes=[];
