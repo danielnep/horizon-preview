@@ -1,6 +1,6 @@
 # Horizon Fluxo · Sistema operacional para restaurantes
 
-**Estado:** primeira implementação web funcional para testes locais, sem APK e sem publicação em produção.
+**Estado:** versão web de testes v0.2, com aplicação por papéis, persistência SQLite, rede local, contingência e sincronização cloud; sem APK e sem publicação em produção.
 
 ## Arquitetura
 
@@ -27,6 +27,14 @@ DEMO_MODE=1 npm start
 ```
 
 Contas de demonstração: `admin`, `cozinha`, `caixa`, `carlos`, `marina`; senha de todas: `demo1234`. **Nunca iniciar DEMO_MODE em produção.** A demonstração inclui cardápio fictício; essas contas existem apenas em bancos novos e isolados. SQLite atual do Node 22 ainda em estado experimental.
+
+## Melhorias v0.2
+
+- Gerência pode registrar a chegada de garçom sem celular na tela Equipe; cozinha confirma e ele fica marcado "sem aparelho".
+- Avisos de disponibilidade ficam registrados por funcionário até a leitura, com contador na navegação.
+- Pedidos têm identificador único para evitar duplicação quando a conexão falha após o envio.
+- Garçom consegue acionar Disponível/Ocupado/Pausa; mudanças reencaminham chamadas pendentes.
+- Chamados no caixa não são recriados em loop; escritas externas bloqueadas por verificação da origem.
 
 ## Fluxos implementados
 
