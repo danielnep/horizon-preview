@@ -1,0 +1,25 @@
+{
+  "name": "Horizon Studio | Central Horizon",
+  "short_name": "Horizon Studio",
+  "id": "./",
+  "start_url": "./#estudio",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#191919",
+  "theme_color": "#191919",
+  "description": "Studio pessoal de criação e acompanhamento de aplicativos Horizon.",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
