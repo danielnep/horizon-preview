@@ -1,9 +1,10 @@
-FROM node:22-alpine
-WORKDIR /app
-COPY package.json ./
-RUN npm install --omit=dev --no-audit --no-fund
-COPY central ./central
-COPY maestro ./maestro
-COPY server.mjs ./
+FROM node:24-alpine
+WORKDIR /srv/horizon-studio
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+COPY . .
+RUN npm test
+ENV NODE_ENV=production PORT=3000 HORIZON_LEGACY_WORKER_EXPLICIT_OPT_IN=false
+USER node
 EXPOSE 3000
-CMD ["node","server.mjs"]
+CMD ["node", "server.mjs"]
